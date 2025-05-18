@@ -23,3 +23,7 @@ pip-delete-this-directory.txt
 
 # IDEs and editors
 .vscode/
+
+data/output/
+data/input/*.csv
+!data/input/market_capitalisation.csv

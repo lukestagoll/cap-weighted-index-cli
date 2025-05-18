@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 
+import sys
+import logging
 import click
+from cap_weighted_index_cli.data.parse_csv import parse_csv
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(levelname)s: %(message)s"
+)
 
 @click.command(context_settings={ "ignore_unknown_options": True })
 @click.option(
@@ -25,8 +33,12 @@ import click
 )
 def main(input: str, output: str, no_output: bool):
     """Market Cap Index - A tool for calculating market cap weighted indices."""
-
-    click.echo(f"Reading from {input!r}")
+    try:
+        click.echo(f"Reading from {input!r}")
+        # process input
+    except ValueError as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
