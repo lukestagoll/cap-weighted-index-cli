@@ -6,9 +6,9 @@ class CLITest(unittest.TestCase):
     def setUp(self):
         self.runner = CliRunner()
 
-    def test_process_command(self):
-        # Test the process command which exists in your CLI
-        result = self.runner.invoke(main, ["process"])
+    def test_main_command(self):
+        # Test the main command
+        result = self.runner.invoke(main, [])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("Reading from", result.output)
         

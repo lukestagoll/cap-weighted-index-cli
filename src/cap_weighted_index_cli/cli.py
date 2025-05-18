@@ -2,12 +2,7 @@
 
 import click
 
-@click.group()
-def main():
-    """Market Cap Index - A tool for calculating market cap weighted indices."""
-    pass
-
-@main.command()
+@click.command(context_settings={ "ignore_unknown_options": True })
 @click.option(
     "--input", "-i",
     type=click.Path(exists=True, file_okay=True, dir_okay=False),
@@ -28,10 +23,9 @@ def main():
     default=False,
     help="Skip writing CSV; Only print results to stdout."
 )
-def process(input: str, output: str, no_output: bool):
-    """
-    Process the input CSV
-    """
+def main(input: str, output: str, no_output: bool):
+    """Market Cap Index - A tool for calculating market cap weighted indices."""
+
     click.echo(f"Reading from {input!r}")
 
 if __name__ == "__main__":
