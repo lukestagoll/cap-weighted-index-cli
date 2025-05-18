@@ -2,7 +2,7 @@ import unittest
 import pandas as pd
 import numpy as np
 import pandas.testing as pdt
-from cap_weighted_index_cli.market.calculate_weights import calculate_weights
+from cap_weighted_index_cli.analysis.calculate_weights import calculate_weights
 
 class TestCalculateWeights(unittest.TestCase):
     def test_calculate_weights(self):

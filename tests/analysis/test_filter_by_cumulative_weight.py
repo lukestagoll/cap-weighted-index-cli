@@ -2,7 +2,7 @@ import unittest
 from numpy import float64
 import pandas as pd
 import pandas.testing as pdt
-from cap_weighted_index_cli.market.filter_by_cumulative_weight import filter_by_cumulative_weight
+from cap_weighted_index_cli.analysis.filter_by_cumulative_weight import filter_by_cumulative_weight
 
 class TestCalculateCumulativeWeights(unittest.TestCase):
     def test_filter_by_cumulative_weight(self):

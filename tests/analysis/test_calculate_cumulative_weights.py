@@ -1,7 +1,7 @@
 import unittest
 import pandas as pd
 import pandas.testing as pdt
-from cap_weighted_index_cli.market.calculate_cumulative_weights import calculate_cumulative_weights
+from cap_weighted_index_cli.analysis.calculate_cumulative_weights import calculate_cumulative_weights
 
 class TestCalculateCumulativeWeights(unittest.TestCase):
     def test_calculate_cumulative_weights(self):
