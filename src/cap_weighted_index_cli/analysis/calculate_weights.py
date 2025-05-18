@@ -22,6 +22,7 @@ def calculate_weights(market_data: DataFrame, total_market_cap: int) -> DataFram
 
     if "market_cap_m" not in market_data.columns:
         raise KeyError("`market_cap_m` column not found in `market_data`")
-    
-    market_data["weight"] = (market_data["market_cap_m"] / total_market_cap).astype("float64")
-    return market_data
+
+    result = market_data.copy()
+    result.loc[:, "weight"] = (market_data["market_cap_m"] / total_market_cap).astype("float64")
+    return result

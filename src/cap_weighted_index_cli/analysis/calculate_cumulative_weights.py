@@ -19,6 +19,7 @@ def calculate_cumulative_weights(market_data: DataFrame) -> DataFrame:
 
     if "weight" not in market_data.columns:
         raise KeyError("`weight` column not found in `market_data`")
-    
-    market_data["cumulative_weight"] = market_data["weight"].cumsum()
-    return market_data
+
+    result = market_data.copy()
+    result.loc[:, "cumulative_weight"] = market_data["weight"].cumsum()
+    return result

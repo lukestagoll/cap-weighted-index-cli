@@ -1,6 +1,7 @@
 from typing import Tuple
 from pandas import DataFrame, concat
 from numpy import float64
+from cap_weighted_index_cli.logging.log_bought import log_bought
 
 def buy_shares(portfolio: DataFrame, shares_to_buy: DataFrame, available_funds: float64) -> Tuple[DataFrame, float64]:
     """Buys shares specified in shares_to_buy DataFrame and adds them to the portfolio.
@@ -28,9 +29,6 @@ def buy_shares(portfolio: DataFrame, shares_to_buy: DataFrame, available_funds: 
 
     if not isinstance(available_funds, float64) or available_funds <= float64(0.0):
         raise TypeError("`available_funds` must be a float64 greater than 0")
-    
-    if "company" not in portfolio.columns:
-        raise KeyError("`company` column not found in `portfolio`")
 
     if "company" not in shares_to_buy.columns:
         raise KeyError("`company` column not found in `shares_to_buy`")
@@ -41,11 +39,18 @@ def buy_shares(portfolio: DataFrame, shares_to_buy: DataFrame, available_funds: 
     if "price" not in shares_to_buy.columns:
         raise KeyError("`price` column not found in `shares_to_buy`")
     
-    if not set(portfolio["company"]).isdisjoint(set(shares_to_buy["company"])):
-        raise ValueError("`shares_to_buy` cannot contain companies that exist in `portfolio`")
+    if "company" in portfolio.columns:
+        if not set(portfolio["company"]).isdisjoint(set(shares_to_buy["company"])):
+            raise ValueError("`shares_to_buy` cannot contain companies that exist in `portfolio`")
     
-    shares_to_buy["value"] = (shares_to_buy["shares"] * shares_to_buy["price"]).astype("float64")
-    funds_remaining = available_funds - shares_to_buy["value"].sum()
+    updated_portfolio = portfolio.copy()
+    if not portfolio.empty:
+        updated_portfolio.loc[:, "value"] = (portfolio["shares"] * portfolio["price"]).astype("float64")
     
-    portfolio = concat([portfolio, shares_to_buy], ignore_index=True)
-    return portfolio, funds_remaining
+    to_buy = shares_to_buy.copy()
+    to_buy.loc[:, "value"] = (shares_to_buy["shares"] * shares_to_buy["price"]).astype("float64")
+    funds_remaining = available_funds - to_buy["value"].sum()
+    log_bought(to_buy, funds_remaining)
+
+    updated_portfolio = concat([updated_portfolio, to_buy], ignore_index=True)
+    return updated_portfolio, funds_remaining

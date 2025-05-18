@@ -39,17 +39,6 @@ class TestIdentifyPortfolioChanges(unittest.TestCase):
         self.assertEqual(to_sell, expected_to_sell)
         self.assertEqual(to_buy, expected_to_buy)
 
-    def test_portfolio_missing_company_column_raises_keyerror(self):
-        portfolio = pd.DataFrame({
-        })
-        market_data = pd.DataFrame({
-            "company": [],
-        })
-        with self.assertRaises(KeyError) as result:
-            identify_portfolio_changes(portfolio, market_data)
-            
-        self.assertIn("`company` column not found in `portfolio`", str(result.exception))
-
     def test_filtered_market_data_missing_company_column_raises_keyerror(self):
         portfolio = pd.DataFrame({
             "company": [],

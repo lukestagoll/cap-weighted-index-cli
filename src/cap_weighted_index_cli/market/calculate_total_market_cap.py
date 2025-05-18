@@ -20,4 +20,4 @@ def calculate_total_market_cap(market_data: DataFrame) -> int:
     if "market_cap_m" not in market_data.columns:
         raise KeyError("`market_cap_m` column not found in `market_data`")
 
-    return market_data["market_cap_m"].sum()
+    return int(market_data["market_cap_m"].sum())

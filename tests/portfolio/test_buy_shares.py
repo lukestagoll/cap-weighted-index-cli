@@ -131,22 +131,6 @@ class TestBuyShares(unittest.TestCase):
             
         self.assertIn("`company` column not found in `shares_to_buy`", str(result.exception))
 
-    def test_missing_company_column_in_portfolio_raises_keyerror(self):
-        portfolio = pd.DataFrame({
-            "price": [10, 8],
-            "shares": [4, 3],
-            "value": [float64(40), float64(24)],
-        })
-        shares_to_buy = pd.DataFrame({
-            "company": ["A", "B"],
-            "price": [1, 2],
-            "shares": [5, 6],
-        })
-        with self.assertRaises(KeyError) as result:
-            buy_shares(portfolio, shares_to_buy, float64(1))
-            
-        self.assertIn("`company` column not found in `portfolio`", str(result.exception))
-
     def test_invalid_portfolio_dataframe_raises_typeerror(self):
         shares_to_buy = pd.DataFrame({
             "company": ["A", "B"],

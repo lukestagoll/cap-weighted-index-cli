@@ -28,5 +28,6 @@ def calculate_shares_to_buy(portfolio: DataFrame, available_funds: float64) -> D
     if "price" not in portfolio.columns:
         raise KeyError("`price` column not found in `portfolio`")
     
-    portfolio["shares"] = floor(available_funds * portfolio["weight"] / portfolio["price"]).astype("int")
-    return portfolio
+    result = portfolio.copy()
+    result.loc[:, "shares"] = floor(available_funds * portfolio["weight"] / portfolio["price"]).astype("int")
+    return result

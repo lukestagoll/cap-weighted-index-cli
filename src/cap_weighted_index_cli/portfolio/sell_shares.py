@@ -29,7 +29,8 @@ def sell_shares(shares_to_sell: DataFrame, available_funds: float64) -> Tuple[Da
     
     if "price" not in shares_to_sell.columns:
         raise KeyError("`price` column not found in `shares_to_sell`")
-    
-    shares_to_sell["value"] = (shares_to_sell["shares"] * shares_to_sell["price"]).astype("float64")
-    funds_remaining = available_funds + shares_to_sell["value"].sum()
-    return shares_to_sell, funds_remaining
+
+    result = shares_to_sell.copy()
+    result.loc[:, "value"] = (shares_to_sell["shares"] * shares_to_sell["price"]).astype("float64")
+    funds_remaining = available_funds + result["value"].sum()
+    return result, funds_remaining
