@@ -11,6 +11,6 @@ def filter_by_date(market_data: DataFrame, date: str) -> DataFrame:
         DataFrame: A filtered DataFrame containing only rows where the date field equals `date`.
 
     Raises:
-        KeyError: If the specified date column does not exist in the DataFrame.
+        KeyError: If the `date` column does not exist in the DataFrame.
     """
     return market_data[market_data["date"] == date]

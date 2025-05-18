@@ -10,6 +10,6 @@ def sort_by_market_cap(market_data: DataFrame) -> DataFrame:
         DataFrame: A DataFrame sorted by `market_cap_m` in descending order
 
     Raises:
-        KeyError: If the specified date column does not exist in the DataFrame.
+        KeyError: If the `market_cap_m` column does not exist in the DataFrame.
     """
     return market_data.sort_values(by="market_cap_m", ascending=False)
