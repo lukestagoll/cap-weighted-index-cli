@@ -8,21 +8,15 @@ from cap_weighted_index_cli.models.market_model import MarketModel
 logger = logging.getLogger(__name__)
 
 def parse_csv(file_path: str) -> Optional[pd.DataFrame]:
-    """
-    Parse a CSV file into a pandas DataFrame and validates it against MarketModel
+    """Parse a CSV file into a pandas DataFrame and validates it against MarketModel
     
-    Parameters:
-    -----------
-    file_path : str
-        Path to the CSV file
+    Args:
+        file_path (str): Path to the CSV file
         
     Returns:
-    --------
-    pd.DataFrame or None
-        Pandas DataFrame containing the CSV data, or None if an error occurs
+        Optional[DataFrame]: Pandas DataFrame containing the CSV data, or None if an error occurs
     """
     try:
-        
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", category=UserWarning)
             df: pd.DataFrame = pd.read_csv(file_path)
