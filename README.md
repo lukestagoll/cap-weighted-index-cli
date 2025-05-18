@@ -2,6 +2,9 @@
 
 A command-line tool for constructing and rebalancing a market capitalization-weighted index.
 
+## Assessment Context
+This project was developed as part of a job application technical assessment for a software engineering role.
+
 ## Overview
 
 This tool implements a market cap-weighted index fund model that:
