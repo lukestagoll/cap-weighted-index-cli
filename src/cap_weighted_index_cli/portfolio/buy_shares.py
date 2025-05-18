@@ -7,7 +7,7 @@ def buy_shares(portfolio: DataFrame, available_funds: float64) -> Tuple[DataFram
 
     Args:
         portfolio (DataFrame): The DataFrame to perform the calculation on, where the `value` column has not been defined.
-        available_funds (float64): The DataFrame to perform the calculation on.
+        available_funds (float64): Number of funds available to spend
 
     Returns:
         Tuple[DataFrame, float64]: A tuple where the first value is the updated DataFrame with a new `value` column,
