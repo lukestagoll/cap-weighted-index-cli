@@ -1,9 +1,8 @@
 import unittest
 import pandas as pd
-import pandas.testing as pdt
 from cap_weighted_index_cli.market.calculate_total_market_cap import calculate_total_market_cap
 
-class TestSortByMarketCap(unittest.TestCase):
+class TestCalculateTotalMarketCap(unittest.TestCase):
     def test_valid_data(self):
         # Arrange
         df = pd.DataFrame({
