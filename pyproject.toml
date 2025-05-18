@@ -1,0 +1,28 @@
+# pyproject.toml
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cap-weighted-index-cli"
+version = "0.1.0"
+authors = [
+  { name="Luke Stagoll", email="lukestagoll16@gmail.com" }
+]
+description = "A CLI that implements a market cap-weighted index"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.12"
+
+dependencies = [
+  "numpy>=1.25",
+  "pandas>=2.0",
+  "click>=8.1"
+]
+
+[project.scripts]
+cap-weighted-index = "cap_weighted_index_cli.cli:main"
+cwi                = "cap_weighted_index_cli.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
