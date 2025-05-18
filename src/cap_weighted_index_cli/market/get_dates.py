@@ -14,6 +14,7 @@ def get_dates(market_data: DataFrame) -> List[Timestamp]:
 
     Raises:
         KeyError: If the `date` column is missing from the input DataFrame.
+        TypeError: If `market_data` is not a DataFrame.
     """
     
     if not isinstance(market_data, DataFrame):

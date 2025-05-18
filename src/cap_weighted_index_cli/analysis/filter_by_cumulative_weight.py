@@ -13,6 +13,7 @@ def filter_by_cumulative_weight(market_data: DataFrame, max_cumulative_weight: f
 
     Raises:
         KeyError: If the `cumulative_weight` column does not exist in the DataFrame.
+        TypeError: If `market_data` is not a DataFrame or `max_cumulative_weight` is not a float64.
     """
     
     if not isinstance(market_data, DataFrame):

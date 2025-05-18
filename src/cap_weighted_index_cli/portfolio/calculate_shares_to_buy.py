@@ -13,6 +13,7 @@ def calculate_shares_to_buy(portfolio: DataFrame, available_funds: float64) -> D
 
     Raises:
         KeyError: If the `weight` and `price` column does not exist in the DataFrame.
+        TypeError: If `portfolio` is not a DataFrame or `available_funds` is not a float64 greater than 0.
     """
 
     if not isinstance(portfolio, DataFrame):

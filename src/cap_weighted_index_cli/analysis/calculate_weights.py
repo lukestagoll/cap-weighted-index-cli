@@ -11,6 +11,7 @@ def calculate_weights(market_data: DataFrame, total_market_cap: int) -> DataFram
 
     Raises:
         KeyError: If the `market_cap_m` column does not exist in the DataFrame.
+        TypeError: If `market_data` is not a DataFrame or `total_market_cap` is not an int.
     """
 
     if not isinstance(market_data, DataFrame):

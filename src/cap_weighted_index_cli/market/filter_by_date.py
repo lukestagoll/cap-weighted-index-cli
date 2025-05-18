@@ -6,13 +6,14 @@ def filter_by_date(market_data: DataFrame, date: Timestamp | str) -> DataFrame:
 
     Args:
         market_data (DataFrame): The input DataFrame containing a date field.
-        date (str): The date value to match (e.g., '01/01/2025').
+        date (str | Timestamp): The str value to match that matches the format `DD/MM/YYYY` or a pandas Timestamp
 
     Returns:
         DataFrame: A filtered DataFrame containing only rows where the date field equals `date`.
 
     Raises:
         KeyError: If the `date` column does not exist in the DataFrame.
+        TypeError: If `market_data` is not a DataFrame or `date` an invalid date.
     """
     
     if not isinstance(market_data, DataFrame):
