@@ -31,10 +31,27 @@ class TestCalculateCumulativeWeights(unittest.TestCase):
         # Assert
         pdt.assert_frame_equal(actual, expected)
 
-    def test_invalid_column_raises_keyerror(self):
+    def test_invalid_max_cumulative_weight_raises_typeerror(self):
+        df = pd.DataFrame({
+            "cumulative_weight": [0.4, 0.7, 0.9, 1.0]
+        })
+        with self.assertRaises(TypeError) as result:
+            filter_by_cumulative_weight(df, "1") # type: ignore
+            
+        self.assertIn("`max_cumulative_weight` must be a float64", str(result.exception))
+
+    def test_missing_column_raises_keyerror(self):
         df = pd.DataFrame({})
-        with self.assertRaises(KeyError):
-            filter_by_cumulative_weight(df, float64(0))
+        with self.assertRaises(KeyError) as result:
+            filter_by_cumulative_weight(df, float64(0.5))
+            
+        self.assertIn("`cumulative_weight` column not found in `market_data`", str(result.exception))
+
+    def test_invalid_dataframe_raises_typeerror(self):
+        with self.assertRaises(TypeError) as result:
+            filter_by_cumulative_weight("not a dataframe", float64(0.5)) # type: ignore
+            
+        self.assertIn("`market_data` must be a DataFrame", str(result.exception))
 
 if __name__ == "__main__":
     unittest.main()

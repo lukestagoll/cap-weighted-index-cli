@@ -12,5 +12,12 @@ def calculate_cumulative_weights(market_data: DataFrame) -> DataFrame:
     Raises:
         KeyError: If the `weight` column does not exist in the DataFrame.
     """
+    
+    if not isinstance(market_data, DataFrame):
+        raise TypeError("`market_data` must be a DataFrame")
+
+    if "weight" not in market_data.columns:
+        raise KeyError("`weight` column not found in `market_data`")
+    
     market_data["cumulative_weight"] = market_data["weight"].cumsum()
     return market_data

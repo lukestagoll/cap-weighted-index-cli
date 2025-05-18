@@ -15,5 +15,12 @@ def get_dates(market_data: DataFrame) -> List[Timestamp]:
     Raises:
         KeyError: If the `date` column is missing from the input DataFrame.
     """
+    
+    if not isinstance(market_data, DataFrame):
+        raise TypeError("`market_data` must be a DataFrame")
+
+    if "date" not in market_data.columns:
+        raise KeyError("`date` column not found in `market_data`")
+    
     dates = market_data["date"].drop_duplicates().sort_values()
     return dates.tolist()

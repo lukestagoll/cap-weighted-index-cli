@@ -1,6 +1,7 @@
-from pandas import DataFrame
+import re
+from pandas import DataFrame, Timestamp
 
-def filter_by_date(market_data: DataFrame, date: str) -> DataFrame:
+def filter_by_date(market_data: DataFrame, date: Timestamp | str) -> DataFrame:
     """Filters the DataFrame to rows where the date field matches the specified date.
 
     Args:
@@ -13,4 +14,14 @@ def filter_by_date(market_data: DataFrame, date: str) -> DataFrame:
     Raises:
         KeyError: If the `date` column does not exist in the DataFrame.
     """
+    
+    if not isinstance(market_data, DataFrame):
+        raise TypeError("`market_data` must be a DataFrame")
+
+    if (not isinstance(date, Timestamp) and not isinstance(date, str)) or (isinstance(date, str) and not re.fullmatch(r"\d{2}/\d{2}/\d{4}", date)):
+        raise TypeError("`date` must be a Timestamp or a date string in the format \"DD/MM/YYYY\"")
+    
+    if "date" not in market_data.columns:
+        raise KeyError("`date` column not found in `market_data`")
+    
     return market_data[market_data["date"] == date]

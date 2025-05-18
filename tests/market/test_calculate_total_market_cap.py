@@ -32,10 +32,18 @@ class TestCalculateTotalMarketCap(unittest.TestCase):
         # Assert
         self.assertEqual(actual, expected)
 
-    def test_invalid_column_raises_keyerror(self):
+    def test_missing_column_raises_keyerror(self):
         df = pd.DataFrame({})
-        with self.assertRaises(KeyError):
+        with self.assertRaises(KeyError) as result:
             calculate_total_market_cap(df)
+            
+        self.assertIn("`market_cap_m` column not found in `market_data`", str(result.exception))
+
+    def test_invalid_dataframe_raises_typeerror(self):
+        with self.assertRaises(TypeError) as result:
+            calculate_total_market_cap("not a dataframe") # type: ignore
+            
+        self.assertIn("`market_data` must be a DataFrame", str(result.exception))
 
 if __name__ == "__main__":
     unittest.main()

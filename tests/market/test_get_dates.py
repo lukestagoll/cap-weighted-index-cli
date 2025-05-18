@@ -50,13 +50,18 @@ class TestGetDates(unittest.TestCase):
         # Assert
         self.assertEqual(result, expected)
 
-    def test_missing_date_column_raises_key_error(self):
-        # Arrange
+    def test_missing_column_raises_keyerror(self):
         df = pd.DataFrame({})
-
-        # Act & Assert
-        with self.assertRaises(KeyError):
+        with self.assertRaises(KeyError) as result:
             get_dates(df)
+            
+        self.assertIn("`date` column not found in `market_data`", str(result.exception))
+
+    def test_invalid_dataframe_raises_typeerror(self):
+        with self.assertRaises(TypeError) as result:
+            get_dates("not a dataframe") # type: ignore
+            
+        self.assertIn("`market_data` must be a DataFrame", str(result.exception))
 
 if __name__ == "__main__":
     unittest.main()

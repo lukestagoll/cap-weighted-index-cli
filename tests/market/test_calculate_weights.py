@@ -61,10 +61,26 @@ class TestCalculateWeights(unittest.TestCase):
         # Assert
         pdt.assert_frame_equal(actual, expected)
 
-    def test_invalid_column_raises_keyerror(self):
+    def test_invalid_total_market_cap_raises_typeerror(self):
+        df = pd.DataFrame({ "market_cap_m": [100] })
+
+        with self.assertRaises(TypeError) as result:
+            calculate_weights(df, "1") # type: ignore
+            
+        self.assertIn("`total_market_cap` must be an int", str(result.exception))
+
+    def test_missing_column_raises_keyerror(self):
         df = pd.DataFrame({})
-        with self.assertRaises(KeyError):
-            calculate_weights(df, 0)
+        with self.assertRaises(KeyError) as result:
+            calculate_weights(df, 10)
+            
+        self.assertIn("`market_cap_m` column not found in `market_data`", str(result.exception))
+
+    def test_invalid_dataframe_raises_typeerror(self):
+        with self.assertRaises(TypeError) as result:
+            calculate_weights("not a dataframe", 10) # type: ignore
+            
+        self.assertIn("`market_data` must be a DataFrame", str(result.exception))
 
 if __name__ == "__main__":
     unittest.main()
