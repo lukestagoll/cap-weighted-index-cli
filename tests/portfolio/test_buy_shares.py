@@ -29,8 +29,7 @@ class TestBuyShares(unittest.TestCase):
 
         # Act
         new_portfolio, remaining_funds = buy_shares(portfolio, shares_to_buy, available_funds)
-        print(new_portfolio)
-        print(expected_portfolio)
+
         # Assert
         pdt.assert_frame_equal(new_portfolio.reset_index(drop=True), expected_portfolio)
         self.assertEqual(remaining_funds, expected_remaining_funds)

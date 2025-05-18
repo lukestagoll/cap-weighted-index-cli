@@ -52,9 +52,6 @@ class TestCalculateSharesToBuy(unittest.TestCase):
         
         # Act
         actual = calculate_shares_to_buy(df, available_funds)
-        
-        print(expected)
-        print(actual)
 
         # Assert
         self.assertEqual(len(actual["shares"]), 0)
