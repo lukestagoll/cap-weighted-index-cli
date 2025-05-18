@@ -1,7 +1,6 @@
 import unittest
 import pandas as pd
-from datetime import datetime
-from cap_weighted_index_cli.data.get_dates import get_dates
+from cap_weighted_index_cli.market.get_dates import get_dates
 
 class TestGetDates(unittest.TestCase):
     def test_sorted_unique_dates(self):

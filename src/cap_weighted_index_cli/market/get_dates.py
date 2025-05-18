@@ -11,6 +11,9 @@ def get_dates(market_data: DataFrame) -> List[Timestamp]:
 
     Returns:
         List[Timestamp]: A list of unique dates in ascending order.
+
+    Raises:
+        KeyError: If the 'date' column is missing from the input DataFrame.
     """
     dates = market_data["date"].drop_duplicates().sort_values()
     return dates.tolist()
