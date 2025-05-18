@@ -7,77 +7,183 @@ from cap_weighted_index_cli.portfolio.buy_shares import buy_shares
 class TestBuyShares(unittest.TestCase):
     def test_buy_shares(self):
         # Arrange
-        df = pd.DataFrame({
-            "price": [10, 8],
-            "shares": [4, 3],
-        })
-        expected_df = pd.DataFrame({
+        portfolio = pd.DataFrame({
+            "company": ["A", "B"],
             "price": [10, 8],
             "shares": [4, 3],
             "value": [float64(40), float64(24)],
         })
+        shares_to_buy = pd.DataFrame({
+            "company": ["C", "D"],
+            "price": [1, 2],
+            "shares": [5, 6],
+        })
+        expected_portfolio = pd.DataFrame({
+            "company": ["A", "B", "C", "D"],
+            "price": [10, 8, 1, 2],
+            "shares": [4, 3, 5, 6],
+            "value": [float64(40), float64(24), float64(5), float64(12)],
+        })
         available_funds = float64(100)
-        expected_remaining_funds = float64(36)
+        expected_remaining_funds = float64(83)
 
         # Act
-        actual_df, remaining_funds = buy_shares(df, available_funds)
-
+        new_portfolio, remaining_funds = buy_shares(portfolio, shares_to_buy, available_funds)
+        print(new_portfolio)
+        print(expected_portfolio)
         # Assert
-        pdt.assert_frame_equal(actual_df.reset_index(drop=True), expected_df)
+        pdt.assert_frame_equal(new_portfolio.reset_index(drop=True), expected_portfolio)
         self.assertEqual(remaining_funds, expected_remaining_funds)
 
     def test_empty_rows(self):
         # Arrange
-        df = pd.DataFrame({ "price": [], "shares": [] })
+        portfolio = pd.DataFrame({
+            "company": [],
+            "price": [],
+            "shares": [],
+            "value": [],
+        })
+        shares_to_buy = pd.DataFrame({
+            "company": [],
+            "price": [],
+            "shares": [],
+        })
+        expected_portfolio = pd.DataFrame({
+            "company": [],
+            "price": [],
+            "shares": [],
+            "value": [],
+        })
         available_funds = float64(100)
         
         # Act
-        actual_df, remaining_funds = buy_shares(df, available_funds)
+        new_portfolio, remaining_funds = buy_shares(portfolio, shares_to_buy, available_funds)
 
         # Assert
-        self.assertEqual(len(actual_df["value"]), 0)
+        self.assertEqual(len(new_portfolio["company"]), 0)
         self.assertEqual(remaining_funds, available_funds)
 
-    def test_buy_shares_with_existing_value_raises_keyerror(self):
+    def test_buy_shares_with_previously_invested_companies_raises_valueerror(self):
         # Arrange
-        df = pd.DataFrame({
+        portfolio = pd.DataFrame({
+            "company": ["A", "B"],
             "price": [10, 8],
-            "shares": [0, 0],
-            "value": [0.4, 0.3],
+            "shares": [4, 3],
+            "value": [float64(40), float64(24)],
+        })
+        shares_to_buy = pd.DataFrame({
+            "company": ["A", "B"],
+            "price": [1, 2],
+            "shares": [5, 6],
         })
         available_funds = float64(100)
 
         # Act
-        with self.assertRaises(KeyError) as result:
-            buy_shares(df, available_funds)
+        with self.assertRaises(ValueError) as result:
+            buy_shares(portfolio, shares_to_buy, available_funds)
             
-        self.assertIn("`value` column has already been defined in `portfolio`", str(result.exception))
-        
+        self.assertIn("`shares_to_buy` cannot contain companies that exist in `portfolio`", str(result.exception))
 
     def test_missing_price_column_raises_keyerror(self):
-        df = pd.DataFrame({ "shares": [] })
+        portfolio = pd.DataFrame({
+            "company": ["A", "B"],
+            "price": [10, 8],
+            "shares": [4, 3],
+            "value": [float64(40), float64(24)],
+        })
+        shares_to_buy = pd.DataFrame({
+            "company": ["C", "D"],
+            "shares": [5, 6],
+        })
         with self.assertRaises(KeyError) as result:
-            buy_shares(df, float64(1))
+            buy_shares(portfolio, shares_to_buy, float64(1))
             
-        self.assertIn("`price` column not found in `portfolio`", str(result.exception))
+        self.assertIn("`price` column not found in `shares_to_buy`", str(result.exception))
 
-    def test_missing_weight_column_raises_keyerror(self):
-        df = pd.DataFrame({ "price": [] })
+    def test_missing_shares_column_raises_keyerror(self):
+        portfolio = pd.DataFrame({
+            "company": ["A", "B"],
+            "price": [10, 8],
+            "shares": [4, 3],
+            "value": [float64(40), float64(24)],
+        })
+        shares_to_buy = pd.DataFrame({
+            "company": ["C", "D"],
+            "price": [1, 2],
+        })
         with self.assertRaises(KeyError) as result:
-            buy_shares(df, float64(1))
+            buy_shares(portfolio, shares_to_buy, float64(1))
             
-        self.assertIn("`shares` column not found in `portfolio`", str(result.exception))
+        self.assertIn("`shares` column not found in `shares_to_buy`", str(result.exception))
 
-    def test_invalid_dataframe_raises_typeerror(self):
+    def test_missing_company_column_raises_keyerror(self):
+        portfolio = pd.DataFrame({
+            "company": ["A", "B"],
+            "price": [10, 8],
+            "shares": [4, 3],
+            "value": [float64(40), float64(24)],
+        })
+        shares_to_buy = pd.DataFrame({
+            "price": [1, 2],
+            "shares": [5, 6],
+        })
+        with self.assertRaises(KeyError) as result:
+            buy_shares(portfolio, shares_to_buy, float64(1))
+            
+        self.assertIn("`company` column not found in `shares_to_buy`", str(result.exception))
+
+    def test_missing_company_column_in_portfolio_raises_keyerror(self):
+        portfolio = pd.DataFrame({
+            "price": [10, 8],
+            "shares": [4, 3],
+            "value": [float64(40), float64(24)],
+        })
+        shares_to_buy = pd.DataFrame({
+            "company": ["A", "B"],
+            "price": [1, 2],
+            "shares": [5, 6],
+        })
+        with self.assertRaises(KeyError) as result:
+            buy_shares(portfolio, shares_to_buy, float64(1))
+            
+        self.assertIn("`company` column not found in `portfolio`", str(result.exception))
+
+    def test_invalid_portfolio_dataframe_raises_typeerror(self):
+        shares_to_buy = pd.DataFrame({
+            "company": ["A", "B"],
+            "price": [1, 2],
+            "shares": [5, 6],
+        })
         with self.assertRaises(TypeError) as result:
-            buy_shares("not a dataframe", float64(1)) # type: ignore
+            buy_shares("not a dataframe", shares_to_buy, float64(1)) # type: ignore
             
         self.assertIn("`portfolio` must be a DataFrame", str(result.exception))
 
-    def test_invalid_available_funds_raises_typeerror(self):
-        df = pd.DataFrame({ "price": [], "weight": [] })
+    def test_invalid_shares_to_buy_dataframe_raises_typeerror(self):
+        portfolio = pd.DataFrame({
+            "price": [10, 8],
+            "shares": [4, 3],
+            "value": [float64(40), float64(24)],
+        })
         with self.assertRaises(TypeError) as result:
-            buy_shares(df, 0) # type: ignore
+            buy_shares(portfolio, "not a dataframe", float64(1)) # type: ignore
+            
+        self.assertIn("`shares_to_buy` must be a DataFrame", str(result.exception))
+
+    def test_invalid_available_funds_raises_typeerror(self):
+        portfolio = pd.DataFrame({
+            "company": ["A", "B"],
+            "price": [10, 8],
+            "shares": [4, 3],
+            "value": [float64(40), float64(24)],
+        })
+        shares_to_buy = pd.DataFrame({
+            "company": ["C", "D"],
+            "price": [1, 2],
+            "shares": [5, 6],
+        })
+        with self.assertRaises(TypeError) as result:
+            buy_shares(portfolio, shares_to_buy, 0) # type: ignore
             
         self.assertIn("`available_funds` must be a float64 greater than 0", str(result.exception))
 
